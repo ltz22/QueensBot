@@ -46,6 +46,18 @@ public class ColorRegion {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ColorRegion that = (ColorRegion) o;
+        return Objects.equals(color, that.color) && Objects.equals(cells, that.cells) && Objects.equals(queenPlacement, that.queenPlacement);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color, cells, queenPlacement);
+    }
+
+    @Override
     public String toString() {
         return "Region[" + color + ", " + cells.size() + " cells]";
     }
