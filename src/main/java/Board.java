@@ -118,6 +118,18 @@ public class Board {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Board board = (Board) o;
+        return size == board.size && Objects.deepEquals(grid, board.grid) && Objects.equals(regions, board.regions) && Objects.equals(queens, board.queens);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(size, Arrays.deepHashCode(grid), regions, queens);
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < size; i++) {
