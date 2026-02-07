@@ -1,17 +1,20 @@
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Scanner;
 
 public class QueensBot {
     private WebDriver driver;
     private WebDriverWait wait;
+    private Board board;
 
-    public QueensBot() {
-        // Don't initialize driver here anymore
-    }
+    //public QueensBot() {
+    //}
 
     public String chooseLevel(){
         while(true){
@@ -48,6 +51,86 @@ public class QueensBot {
         }catch(InterruptedException e){
             e.printStackTrace();
         }
+
+        // Parse the board
+        parseBoard();
+
+        // Print board info
+        System.out.println("Board parsed successfully!");
+        System.out.println("Board size: " + board.getSize() + "x" + board.getSize());
+        System.out.println("Number of color regions: " + board.getRegions().size());
+        System.out.println("\nBoard state:");
+        System.out.println(board);
+    }
+
+    public Board getBoard(){
+        return this.board;
+    }
+
+    public void parseBoard() {
+        // Find all square elements
+        List<WebElement> squares = driver.findElements(By.cssSelector("div.square"));
+
+        if (squares.isEmpty()) {
+            throw new RuntimeException("No squares found");
+        }
+
+        // Determine board size
+        int maxRow = 0;
+        int maxCol = 0;
+
+        for (WebElement square : squares) {
+            String rowStr = square.getAttribute("data-row");
+            String colStr = square.getAttribute("data-col");
+
+            if (rowStr != null && colStr != null) {
+                int row = Integer.parseInt(rowStr);
+                int col = Integer.parseInt(colStr);
+                maxRow = Math.max(maxRow, row);
+                maxCol = Math.max(maxCol, col);
+            }
+        }
+
+        int boardSize = maxRow + 1;
+        board = new Board(boardSize);
+
+        // Parse each square
+        for (WebElement square : squares) {
+            String rowStr = square.getAttribute("data-row");
+            String colStr = square.getAttribute("data-col");
+            String style = square.getAttribute("style");
+
+            if (rowStr == null || colStr == null || style == null) {
+                continue;
+            }
+
+            int row = Integer.parseInt(rowStr);
+            int col = Integer.parseInt(colStr);
+
+            // Extract RGB color from style attribute
+            String color = extractColor(style);
+
+            if (color != null) {
+                board.setCell(row, col, color);
+            }
+        }
+
+        System.out.println("Parsed " + squares.size() + " squares");
+    }
+
+    public String extractColor(String style) {
+        int rgbStart = style.indexOf("rgb(");
+        if (rgbStart == -1) {
+            return null;
+        }
+
+        int rgbEnd = style.indexOf(")", rgbStart);
+        if (rgbEnd == -1) {
+            return null;
+        }
+
+        // Return the full rgb(...) string
+        return style.substring(rgbStart, rgbEnd + 1);
     }
 
     public void close(){
