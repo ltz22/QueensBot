@@ -59,8 +59,9 @@ public class QueensBot {
         System.out.println("Board parsed successfully!");
         System.out.println("Board size: " + board.getSize() + "x" + board.getSize());
         System.out.println("Number of color regions: " + board.getRegions().size());
-        System.out.println("\nBoard state:");
-        System.out.println(board);
+
+        QueensSolver solver = new QueensSolver(board);
+        solver.solve();
     }
 
     public Board getBoard(){
