@@ -10,10 +10,7 @@ public class QueensBot {
     private WebDriverWait wait;
 
     public QueensBot() {
-        //System.setProperty("webdriver.chrome.driver", "C:\\Users\\zhang\\Downloads\\chromedriver-win64\\chromedriver.exe");
-
-        driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        // Don't initialize driver here anymore
     }
 
     public String chooseLevel(){
@@ -32,6 +29,18 @@ public class QueensBot {
 
     public void start(){
         String levelChosen = chooseLevel();
+
+        System.out.println("Starting in 3 seconds...");
+        try{
+            Thread.sleep(3000);
+        }catch(InterruptedException e){
+            e.printStackTrace();
+        }
+
+        // Initialize driver only when starting
+        driver = new ChromeDriver();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
         driver.get("https://queensgame.vercel.app/community-level/" + levelChosen);
 
         try{
@@ -42,6 +51,8 @@ public class QueensBot {
     }
 
     public void close(){
-        driver.quit();
+        if(driver != null){
+            driver.quit();
+        }
     }
 }
