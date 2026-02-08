@@ -1,0 +1,3 @@
+- Download and run
+- Enter a number between 1-504 that corresponds to the levels
+- Sit back and relax!
