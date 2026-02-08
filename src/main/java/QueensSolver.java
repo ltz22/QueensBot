@@ -93,22 +93,18 @@ public class QueensSolver {
 
     private boolean conflictExists(Cell cell1, Cell cell2) {
         // Check if two cells conflict (same row, same column, or adjacent)
-
         // Same row
         if (cell1.getRow() == cell2.getRow()) {
             return true;
         }
-
         // Same column
         if (cell1.getCol() == cell2.getCol()) {
             return true;
         }
-
         // Adjacent
         if (cell1.isAdjacent(cell2)) {
             return true;
         }
-
         return false;
     }
 
@@ -123,7 +119,7 @@ public class QueensSolver {
             Cell queenCell = cells.get(position);
 
             board.placeQueen(queenCell);
-            System.out.println("Queen placed at (" + queenCell.getRow() + ", " + queenCell.getCol() + ") in region " + color);
+            //System.out.println("Queen placed at (" + queenCell.getRow() + ", " + queenCell.getCol() + ") in region " + color);
         }
 
         System.out.println("\nFinal board:");
